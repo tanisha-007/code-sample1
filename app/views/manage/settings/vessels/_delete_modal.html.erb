@@ -1,0 +1,34 @@
+<%= component "modal", title: "Remove Vessel", content_only: true do |c| %>
+  <% c.body do %>
+    <%= form_for [@organization, @delete_vessel],
+                  url: {
+                    controller: controller_name,
+                    action: :delete_vessel
+                  },
+                  builder: WrappedFormBuilder,
+                  remote: true do |f| %>
+      <div class="modal__body">
+        Do you wish to move the connected users to another existing vessel?
+      </div>
+      <div class="modal__body">
+        <%= f.select :move_users_to_vessel_id,
+              options_for_select(@vessels.by_name.collect {|v| [ v.name, v.id ] }),
+              { include_blank: "Do not move users" },
+              data: { cy: "select-vessel" } %>
+      </div>
+      <div class="modal__footer">
+        <%= button_tag "Cancel",
+                       type: :button,
+                       class: "btn--link u-mr u-text-muted",
+                       data: { target: "form-activation.action", action: "modal#hide" } %>
+        <%= f.submit "Save",
+          class: "btn btn--primary",
+          data: {
+            cy: "vessel-submit",
+            disable_with: "Saving"
+          }
+        %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
